@@ -11,7 +11,7 @@ public class App
         XMLNodeReader reader = new XMLNodeFileReader(file);
 
         for (String s : reader) {
-
+            System.out.println(s);
         }
     }
 }
