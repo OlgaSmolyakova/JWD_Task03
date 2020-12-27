@@ -6,20 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Iterator;
 
-public class XMLNodeFileReader implements XMLNodeReader, Iterator<String> {
+public class XMLNodeFileReader implements XMLNodeReader {
 
     Iterator<String> fileIterator;
     StringBuilder buffer = new StringBuilder();
 
     public XMLNodeFileReader(File file) throws XMLNodeReaderException {
-        FileReader fileReader;
-        try {
-            fileReader = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            throw new XMLNodeReaderException();
-        }
-
-        fileIterator = new BufferedReader(fileReader).lines().iterator();
+        fileIterator = getFileIterator(file);
     }
 
     @Override
@@ -96,5 +89,21 @@ public class XMLNodeFileReader implements XMLNodeReader, Iterator<String> {
      */
     private void correctBufferBounds(int bufferStartIndex) {
         buffer.delete(0, Math.min(bufferStartIndex, buffer.length()));
+    }
+
+    private Iterator<String> getFileIterator(File file) throws XMLNodeReaderException {
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new XMLNodeReaderException();
+        }
+
+        return new BufferedReader(fileReader).lines().iterator();
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return this;
     }
 }
