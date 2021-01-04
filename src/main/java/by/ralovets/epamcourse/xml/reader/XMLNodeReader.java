@@ -1,4 +1,4 @@
-package by.ralovets.epamcourse.xml;
+package by.ralovets.epamcourse.xml.reader;
 
 import java.util.Iterator;
 

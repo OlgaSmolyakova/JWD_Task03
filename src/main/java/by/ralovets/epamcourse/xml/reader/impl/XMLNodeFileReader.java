@@ -1,4 +1,7 @@
-package by.ralovets.epamcourse.xml;
+package by.ralovets.epamcourse.xml.reader.impl;
+
+import by.ralovets.epamcourse.xml.reader.XMLNodeReader;
+import by.ralovets.epamcourse.xml.reader.XMLNodeReaderException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,8 +30,6 @@ public class XMLNodeFileReader implements XMLNodeReader {
            s = fileIterator.next().trim();
             if (!s.isEmpty()) break;
         }
-
-        // чекнуть конец
 
         buffer.append(s);
         if (buffer.charAt(0) == '<') {
