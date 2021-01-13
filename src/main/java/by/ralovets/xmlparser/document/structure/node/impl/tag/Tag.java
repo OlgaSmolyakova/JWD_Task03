@@ -13,7 +13,7 @@ public abstract class Tag extends Node {
     private String name;
     private List<Attribute> attributes;
 
-    public Tag() {
+    public Tag(boolean isSingleTag) {
         type = isSingleTag ? NodeType.SINGLE_TAG : NodeType.DOUBLE_TAG;
     }
 
@@ -55,14 +55,6 @@ public abstract class Tag extends Node {
 
     @Override
     public String toString() {
-//        StringBuilder result = new StringBuilder(isSingleTag ? "SingleTag [" : "DoubleTag [");
-//
-//        for (Attribute a : attributes) {
-//            result.append(a).append(',');
-//        }
-//
-//        result.deleteCharAt(result.length() - 1).append(']');
-//        return result.toString();
         return name;
     }
 

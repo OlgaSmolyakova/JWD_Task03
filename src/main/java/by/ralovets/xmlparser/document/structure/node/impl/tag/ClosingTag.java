@@ -9,6 +9,11 @@ import java.util.List;
 
 public class ClosingTag extends Tag {
 
+    public ClosingTag() {
+        super(true);
+        type = NodeType.CLOSING_TAG;
+    }
+
     @Override
     public NodeType getType() {
         return NodeType.CLOSING_TAG;

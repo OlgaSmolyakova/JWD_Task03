@@ -11,7 +11,7 @@ public class Document {
     private Node rootNode;
 
     public Node getRootNode() {
-        return rootNode;
+        return rootNode.getChildren().get(0);
     }
 
     public void setRootNode(Node rootNode) {
