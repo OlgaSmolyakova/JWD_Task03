@@ -3,7 +3,8 @@ package by.ralovets.xmlparser.document.builder;
 import by.ralovets.xmlparser.document.builder.exception.InputSourceException;
 import by.ralovets.xmlparser.document.builder.util.XMLContentSplitter;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;

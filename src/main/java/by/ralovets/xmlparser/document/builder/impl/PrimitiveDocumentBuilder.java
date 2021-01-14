@@ -2,18 +2,14 @@ package by.ralovets.xmlparser.document.builder.impl;
 
 import by.ralovets.xmlparser.document.builder.DocumentBuilder;
 import by.ralovets.xmlparser.document.builder.InputSource;
-import by.ralovets.xmlparser.document.builder.exception.InputSourceException;
+import by.ralovets.xmlparser.document.builder.exception.DocumentBuilderException;
 import by.ralovets.xmlparser.document.parser.NodeParser;
-import by.ralovets.xmlparser.document.structure.Attribute;
+import by.ralovets.xmlparser.document.parser.NodeParserException;
 import by.ralovets.xmlparser.document.structure.Document;
 import by.ralovets.xmlparser.document.structure.node.Node;
-import by.ralovets.xmlparser.document.structure.node.impl.Comment;
-import by.ralovets.xmlparser.document.structure.node.impl.Text;
 import by.ralovets.xmlparser.document.structure.node.impl.tag.DoubleTag;
-import by.ralovets.xmlparser.document.structure.node.impl.tag.SingleTag;
 import by.ralovets.xmlparser.document.structure.node.impl.tag.Tag;
 
-import java.util.List;
 import java.util.Stack;
 
 public class PrimitiveDocumentBuilder extends DocumentBuilder {
@@ -23,14 +19,20 @@ public class PrimitiveDocumentBuilder extends DocumentBuilder {
     private final Stack<String> stack = new Stack<>();
 
     @Override
-    public Document parse(InputSource inputSource) {
+    public Document parse(InputSource inputSource) throws DocumentBuilderException {
 
         Document document = new Document();
         document.setRootNode(rootNode);
         Node node;
 
         for (String stringNode : inputSource.getNodesList()) {
-            node = NodeParser.parseNode(stringNode);
+
+            try {
+                node = NodeParser.parseNode(stringNode);
+            } catch (NodeParserException e) {
+                throw new DocumentBuilderException();
+            }
+
             dispatchNodeInsertion(node);
         }
 
@@ -40,11 +42,21 @@ public class PrimitiveDocumentBuilder extends DocumentBuilder {
 
     private void dispatchNodeInsertion(Node n) {
         switch (n.getType()) {
-            case COMMENT: dispatchComment(n); break;
-            case TEXT: dispatchText(n); break;
-            case SINGLE_TAG: dispatchSingleTag(n); break;
-            case DOUBLE_TAG: dispatchDoubleTag(n); break;
-            case CLOSING_TAG: dispatchClosingTag(n); break;
+            case COMMENT:
+                dispatchComment(n);
+                break;
+            case TEXT:
+                dispatchText(n);
+                break;
+            case SINGLE_TAG:
+                dispatchSingleTag(n);
+                break;
+            case DOUBLE_TAG:
+                dispatchDoubleTag(n);
+                break;
+            case CLOSING_TAG:
+                dispatchClosingTag(n);
+                break;
         }
     }
 

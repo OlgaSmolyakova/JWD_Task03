@@ -55,7 +55,20 @@ public abstract class Tag extends Node {
 
     @Override
     public String toString() {
-        return name;
+        StringBuilder builder = new StringBuilder();
+        builder.append(name);
+
+        if (!attributes.isEmpty()) {
+            builder.append(" [");
+
+            for (Attribute a : attributes) {
+                builder.append(a).append("; ");
+            }
+
+            builder.append(']');
+        }
+
+        return builder.toString();
     }
 
 

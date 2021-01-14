@@ -5,7 +5,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class DocumentBuilderFactory {
 
-    private DocumentBuilderFactory() {}
+    private DocumentBuilderFactory() {
+    }
 
     public static DocumentBuilder newDocumentBuilder() {
         return new PrimitiveDocumentBuilder();

@@ -28,6 +28,6 @@ public class Attribute {
 
     @Override
     public String toString() {
-        return "[" + key + ":" + value + "]";
+        return key + ":" + value;
     }
 }

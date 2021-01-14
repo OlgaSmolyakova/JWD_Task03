@@ -8,23 +8,34 @@ import by.ralovets.xmlparser.document.structure.node.impl.Text;
 import by.ralovets.xmlparser.document.structure.node.impl.tag.ClosingTag;
 import by.ralovets.xmlparser.document.structure.node.impl.tag.DoubleTag;
 import by.ralovets.xmlparser.document.structure.node.impl.tag.SingleTag;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static by.ralovets.xmlparser.document.structure.node.NodeType.*;
 
 public class NodeParser {
 
-    private NodeParser() {}
+    private static final char SINGLE_QUOTE = '\'';
+    private static final char DOUBLE_QUOTE = '"';
 
-    public static Node parseNode(String s) {
+    private NodeParser() {
+    }
+
+    public static Node parseNode(String s) throws NodeParserException {
         switch (determineNodeType(s)) {
-            case TEXT: return parseText(s);
-            case COMMENT: return parseComment(s);
-            case SINGLE_TAG: return parseSingleTag(s);
-            case DOUBLE_TAG: return parseDoubleTag(s);
-            case CLOSING_TAG: return parseClosingTag(s);
+            case TEXT:
+                return parseText(s);
+            case COMMENT:
+                return parseComment(s);
+            case SINGLE_TAG:
+                return parseSingleTag(s);
+            case DOUBLE_TAG:
+                return parseDoubleTag(s);
+            case CLOSING_TAG:
+                return parseClosingTag(s);
         }
         throw new IllegalArgumentException();
     }
@@ -37,14 +48,14 @@ public class NodeParser {
         return TEXT;
     }
 
-    private static SingleTag parseSingleTag(String s) {
+    private static SingleTag parseSingleTag(String s) throws NodeParserException {
         SingleTag tag = new SingleTag();
         tag.setName(parseTagName(s));
         tag.setAttributes(parseAttributes(s));
         return tag;
     }
 
-    private static DoubleTag parseDoubleTag(String s) {
+    private static DoubleTag parseDoubleTag(String s) throws NodeParserException {
         DoubleTag tag = new DoubleTag();
         tag.setName(parseTagName(s));
         tag.setAttributes(parseAttributes(s));
@@ -87,7 +98,57 @@ public class NodeParser {
         return s.substring(startIndex, endIndex);
     }
 
-    private static List<Attribute> parseAttributes(String s) {
-        return null;
+    private static List<Attribute> parseAttributes(String s) throws NodeParserException {
+        if (s.startsWith("</")) return new ArrayList<>();
+
+        int startIndex = s.indexOf(" ");
+
+        if (startIndex == -1) return new ArrayList<>();
+
+        int endIndex = s.endsWith("/>")
+                ? s.lastIndexOf("/")
+                : s.lastIndexOf(">");
+
+        if (startIndex >= endIndex) return new ArrayList<>();
+
+        List<Attribute> attributes = new ArrayList<>();
+
+        s = s.substring(startIndex, endIndex);
+        StringBuilder buffer = new StringBuilder();
+        int i = 0;
+        while (i < s.length()) {
+            String attributeName;
+            String attributeValue;
+
+            buffer.setLength(0);
+            while (s.charAt(i) != '=') {
+                buffer.append(s.charAt(i));
+                i++;
+            }
+            attributeName = buffer.toString().trim();
+
+            i++;
+            while (s.charAt(i) == ' ') i++;
+            if (s.charAt(i) != SINGLE_QUOTE && s.charAt(i) != DOUBLE_QUOTE) {
+                throw new NodeParserException();
+            }
+
+            char quote = s.charAt(i);
+            i++;
+            buffer.setLength(0);
+            while (s.charAt(i) != quote) {
+                buffer.append(s.charAt(i));
+                i++;
+            }
+
+            attributeValue = buffer.toString();
+
+            Attribute attribute = new Attribute(attributeName, attributeValue);
+            attributes.add(attribute);
+
+            i++;
+        }
+
+        return attributes;
     }
 }
