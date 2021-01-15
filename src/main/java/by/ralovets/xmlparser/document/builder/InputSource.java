@@ -52,7 +52,7 @@ public class InputSource {
             throw new InputSourceException();
         }
 
-        content = builder.toString().replaceAll("<\\?.*\\?>", "");
+        content = builder.toString().replaceAll("<\\?.*?\\?>", "");
     }
 
 }
