@@ -40,7 +40,7 @@ public class InputSource {
             throw new InputSourceException();
         }
 
-        content = builder.toString();
+        content = builder.toString().replaceAll("<\\?.*\\?>", "");
     }
 
     public InputSource(String uri) throws InputSourceException {
@@ -52,7 +52,7 @@ public class InputSource {
             throw new InputSourceException();
         }
 
-        content = builder.toString();
+        content = builder.toString().replaceAll("<\\?.*\\?>", "");
     }
 
 }
