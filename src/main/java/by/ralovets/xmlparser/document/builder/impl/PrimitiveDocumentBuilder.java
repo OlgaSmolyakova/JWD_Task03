@@ -10,13 +10,14 @@ import by.ralovets.xmlparser.document.structure.node.Node;
 import by.ralovets.xmlparser.document.structure.node.impl.tag.DoubleTag;
 import by.ralovets.xmlparser.document.structure.node.impl.tag.Tag;
 
-import java.util.Stack;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class PrimitiveDocumentBuilder extends DocumentBuilder {
 
     private Node rootNode = new DoubleTag();
     private Node currentNode = rootNode;
-    private final Stack<String> stack = new Stack<>();
+    private final Deque<String> stack = new LinkedList<>();
 
     @Override
     public Document parse(InputSource inputSource) throws DocumentBuilderException {
@@ -84,7 +85,11 @@ public class PrimitiveDocumentBuilder extends DocumentBuilder {
     }
 
     private void dispatchClosingTag(Node n) {
-        if (stack.peek().equals(((Tag) n).getName())) {
+        String s;
+
+        if ((s = stack.peek()) == null) return;
+
+        if (s.equals(((Tag) n).getName())) {
             stack.pop();
             currentNode = currentNode.getParent();
         }
