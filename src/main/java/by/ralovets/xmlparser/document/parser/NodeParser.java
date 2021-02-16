@@ -16,6 +16,7 @@ import java.util.Set;
 
 import static by.ralovets.xmlparser.document.structure.node.NodeType.*;
 
+// константы в коде именуются, как бы не было лень
 public class NodeParser {
 
     private static final char SINGLE_QUOTE = '\'';
